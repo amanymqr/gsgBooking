@@ -48,13 +48,13 @@ class AdminController extends Controller
     public function showRooms($id)
     {
         $room = Room::findOrFail($id);
-        return view('admin.room.index', compact('room'));
+        return view('admin.room_index', compact('room'));
     }
 
     public function editRooms($id)
     {
         $room = Room::findOrFail($id);
-        return view('admin.room.edit', compact('room'));
+        return view('admin.room_edit', compact('room'));
     }
 
     public function updateRooms(Request $request)
@@ -91,7 +91,7 @@ class AdminController extends Controller
     public function showBooking($id)
     {
         $booking = Booking::findOrFail($id);
-        return view('admin.booking.show', compact('booking'));
+        return view('admin.booking_show', compact('booking'));
     }
 
     public function acceptBooking(Booking $booking)
@@ -100,7 +100,7 @@ class AdminController extends Controller
         $booking->save();
 
         return redirect()->back()
-            ->with('success', 'Leave request Accepted.');
+            ->with('success', 'Booking Accepted.');
     }
 
     public function denyBooking(Booking $booking)
@@ -109,6 +109,6 @@ class AdminController extends Controller
         $booking->save();
 
         return redirect()->back()
-            ->with('error', 'Leave request Denied.');
+            ->with('error', 'Booking Denied.');
     }
 }
