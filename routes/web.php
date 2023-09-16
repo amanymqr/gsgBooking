@@ -43,6 +43,22 @@ Route::controller(UserController::class)->group(function () {
 
     Route::post('/booking/store', 'store')
         ->name('user.store.booking');
+
+    Route::get('/user/rooms/show', 'showRooms')
+        ->name('user.room.show');
+
+    Route::get('/user/booking/show', 'showBooking')
+        ->name('user.booking.show');
+
+        Route::get('/user/booking/edit', 'editBooking')
+        ->name('admin.booking.edit');
+
+    Route::get('/user/booking/update/{id}', 'updateBooking')
+        ->name('admin.booking.update');
+
+    Route::delete('/user/booking/delete/{id}', 'deteleBooking')
+        ->name('admin.booking.delete');
+
 });
 
 

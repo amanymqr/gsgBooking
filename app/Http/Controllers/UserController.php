@@ -12,19 +12,22 @@ class UserController extends Controller
     public function index()
     {
         $rooms = Room::all();
-        return view('user.index', compact('rooms'));
+        $booking = Booking::all();
+        return view('user.index', compact('rooms', 'booking'));
     }
 
-    public function viewRooms()
+    public function showRooms()
     {
         $rooms = Room::all();
-        return view('user.view_rooms', compact('rooms'));
+        return view('user.show_rooms', compact('rooms'));
     }
+
     public function createBooking()
     {
         $rooms = Room::all();
         return view('user.booking.create', compact('rooms'));
     }
+
     public function storeBooking(Request $request)
     {
         $request->validate([
@@ -36,15 +39,42 @@ class UserController extends Controller
         ]);
 
         Booking::create($request->all());
-        // Booking::create([
-        //     'user_id' => Auth::guard('user')->id(),
-        //     'room_id' => $request->input('room_id'),
-        //     'booking_name' => $request->input('booking_name'),
-        //     'start_time' => $request->input('start_time'),
-        //     'end_time' => $request->input('end_time'),
-        // ]);
 
         return redirect()->route('user.index')->with('success', 'Booking Created');
     }
 
+    public function showBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return view('user.booking_show', compact('booking'));
+    }
+
+    public function editBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return view('user.booking_edit', compact('booking'));
+    }
+
+    public function updateRooms(Request $request)
+    {
+        $request->validate([
+            'user_id' => ['required'],
+            'room_id' => ['required'],
+            'booking_name' => ['required'],
+            'start_time' => ['required'],
+            'end_time' => ['required'],
+        ]);
+        Booking::updated($request->all());
+
+        return redirect()->route('user.booking_show')->with('success', 'Booking Created');
+    }
+
+    public function deteleBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return redirect()->route('user.booking.show')
+            ->with('success', 'Booking deleted successfully.');
+    }
 }
