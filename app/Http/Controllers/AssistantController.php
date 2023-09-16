@@ -41,6 +41,7 @@ class AssistantController extends Controller
         $booking->status = 'deny';
         $booking->save();
 
+        
         return redirect()->back()
             ->with('error', 'Booking Denied.');
     }
