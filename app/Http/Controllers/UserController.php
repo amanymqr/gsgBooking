@@ -35,15 +35,16 @@ class UserController extends Controller
             'end_time' => ['required'],
         ]);
 
-        Booking::create([
-            'user_id' => Auth::guard('user')->id(),
-            'room_id' => $request->input('room_id'),
-            'booking_name' => $request->input('booking_name'),
-            'start_time' => $request->input('start_time'),
-            'end_time' => $request->input('end_time'),
-        ]);
+        Booking::create($request->all());
+        // Booking::create([
+        //     'user_id' => Auth::guard('user')->id(),
+        //     'room_id' => $request->input('room_id'),
+        //     'booking_name' => $request->input('booking_name'),
+        //     'start_time' => $request->input('start_time'),
+        //     'end_time' => $request->input('end_time'),
+        // ]);
 
         return redirect()->route('user.index')->with('success', 'Booking Created');
     }
-    
+
 }

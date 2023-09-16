@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Assistant extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
     public function Room()
     {
         return $this->belongsTo(Room::class);

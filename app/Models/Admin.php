@@ -9,6 +9,8 @@ class Admin extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function Room()
     {
         return $this->belongsTo(Room::class);

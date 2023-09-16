@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,22 +33,52 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/', [UserController::class, 'index']);
+Route::controller(UserController::class)->group(function () {
 
-Route::get('/booking/create', [UserController::class, 'create']);
-Route::post('/booking', [UserController::class, 'store']);
+    Route::get('/', 'index')
+        ->name('user.index');
+
+    Route::get('/booking/create', 'create')
+        ->name('user.booking.name');
+
+    Route::post('/booking/store', 'store')
+        ->name('user.store.booking');
+});
 
 
 Route::controller(AdminController::class)->group(function () {
 
     Route::get('/admin/rooms', 'index')
         ->name('admin.index');
-    Route::post('/admin/rooms/create', 'create')
-        ->name('admin.rooms.create');
-    Route::post('/admin/rooms/store', 'storeRoom')
-        ->name('admin.rooms.store');
 
+    Route::post('/admin/rooms/create', 'create')
+        ->name('admin.room.create');
+
+    Route::post('/admin/rooms/store', 'storeRoom')
+        ->name('admin.room.store');
+
+    Route::get('/admin/rooms/show', 'showRooms')
+        ->name('admin.room.show');
+
+    Route::get('/admin/rooms/edit', 'editRooms')
+        ->name('admin.room.edit');
+
+    Route::get('/admin/rooms/update/{id}', 'updateRooms')
+        ->name('admin.rooms.update');
+
+    Route::delete('/admin/rooms/delete/{id}', 'deleteRooms')
+        ->name('admin.room.delete');
+
+    Route::get('/admin/booking/show', 'showBooking')
+        ->name('admin.booking.show');
+
+    Route::post('/admin/booking/accept/{booking}', 'acceptBooking')
+        ->name('admin.booking.accept');
+
+    Route::post('/admin/booking/deny/{booking}', 'denyBooking')
+        ->name('admin.booking.deny');
 });
+
 
 
 

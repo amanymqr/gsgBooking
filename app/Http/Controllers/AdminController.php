@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $rooms = Room::all();
         $booking = Booking::all();
-        return view('admin.training_rooms.index', compact('rooms' , 'booking'));
+        return view('admin.room.index', compact('rooms', 'booking'));
     }
 
     public function create()
@@ -45,11 +45,70 @@ class AdminController extends Controller
         return redirect()->route('admin.index')->with('success', 'Room Created');
     }
 
-    public function showRooms(){
-
+    public function showRooms($id)
+    {
+        $room = Room::findOrFail($id);
+        return view('admin.room.index', compact('room'));
     }
 
-    public function showBooking(){
+    public function editRooms($id)
+    {
+        $room = Room::findOrFail($id);
+        return view('admin.room.edit', compact('room'));
+    }
 
+    public function updateRooms(Request $request)
+    {
+        $request->validate([
+            'name' => ['required'],
+            'type' => ['required'],
+            'seats' => ['required'],
+            'location' => ['required'],
+            'working_days' => ['required'],
+        ]);
+
+        Auth::guard('admin')->Room()->update([
+            'name' => $request->input('name'),
+            'type' => $request->input('type'),
+            'seats' => $request->input('seats'),
+            'location' => $request->input('location'),
+            'working_days' => $request->input('working_days'),
+
+        ]);
+
+        return redirect()->route('admin.room.show')->with('success', 'Room Updated.');
+    }
+
+    public function deteleRooms($id)
+    {
+        $room = Room::findOrFail($id);
+        $room->delete();
+
+        return redirect()->route('admin.room.show')
+            ->with('success', 'Room deleted successfully.');
+    }
+
+    public function showBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return view('admin.booking.show', compact('booking'));
+    }
+
+    public function acceptBooking(Booking $booking)
+    {
+        $booking->status = 'accept';
+        $booking->save();
+
+        return redirect()->back()
+            ->with('success', 'Leave request Accepted.');
+    }
+
+    public function denyBooking(Booking $booking)
+    {
+        $booking->status = 'deny';
+        $booking->save();
+
+        return redirect()->back()
+            ->with('error', 'Leave request Denied.');
     }
 }
