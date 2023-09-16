@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+
+Route::get('/', [UserController::class, 'index']);
+
+Route::get('/booking/create', [UserController::class, 'create']);
+Route::post('/booking', [UserController::class, 'store']);
+
+
+Route::get('/admin/rooms', [AdminController::class ,'index']);
+Route::post('/admin/rooms', [AdminController::class ,'storeRoom']);
+
+
+
+// require __DIR__.'/auth.php';

@@ -8,6 +8,7 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -20,7 +21,22 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $guardTypes = [
+            'admin' => 'admins',
+            'assistant' => 'assistants',
+        ];
+
+        foreach ($guardTypes as $guard => $path) {
+            if (request()->is($guard, "$guard/*")) {
+                Config::set([
+                    'fortify.guard' => $guard,
+                    'fortify.prefix' => $guard,
+                    'fortify.passwords' => $path,
+                    'fortify.username' => 'username',
+                ]);
+                break;
+            }
+        }
     }
 
     /**
@@ -33,6 +49,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        Fortify::viewPrefix('auth.');
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
