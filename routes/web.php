@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -50,7 +51,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/user/booking/show', 'showBooking')
         ->name('user.booking.show');
 
-        Route::get('/user/booking/edit', 'editBooking')
+    Route::get('/user/booking/edit', 'editBooking')
         ->name('admin.booking.edit');
 
     Route::get('/user/booking/update/{id}', 'updateBooking')
@@ -58,7 +59,6 @@ Route::controller(UserController::class)->group(function () {
 
     Route::delete('/user/booking/delete/{id}', 'deteleBooking')
         ->name('admin.booking.delete');
-
 });
 
 
@@ -95,6 +95,24 @@ Route::controller(AdminController::class)->group(function () {
         ->name('admin.booking.deny');
 });
 
+
+Route::controller(AssistantController::class)->group(function () {
+
+    Route::get('/assistant/rooms', 'index')
+        ->name('assistant.index');
+
+    Route::get('/assistant/rooms/show', 'showRooms')
+        ->name('assistant.room.show');
+
+    Route::get('/assistant/booking/show', 'showBooking')
+        ->name('admin.booking.show');
+
+    Route::post('/assistant/booking/accept/{booking}', 'acceptBooking')
+        ->name('assistant.booking.accept');
+
+    Route::post('/assistant/booking/deny/{booking}', 'denyBooking')
+        ->name('assistant.booking.deny');
+});
 
 
 
